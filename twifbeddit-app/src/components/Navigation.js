@@ -45,7 +45,7 @@ const Navigation = (props) => {
 				<Col col={4} offset={2}>
 					<MyInputGroup>
 						<MyInput />
-						<MyInputGroup.Button onClick={() => setIsLoggedIn(!isLoggedIn)}>
+						<MyInputGroup.Button>
 							<Icon icon="search" />
 						</MyInputGroup.Button>
 					</MyInputGroup>
