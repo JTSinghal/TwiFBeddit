@@ -28,18 +28,18 @@ const AccountPage = () => {
 					</ProfilePictureCol>
 					<FollowCol col={4} offset={1}>
 						<FollowText>Followers</FollowText>
-						<FollowNum>6969</FollowNum>
+						<FollowNum>354</FollowNum>
 					</FollowCol>
 					<FollowCol col={4}>
 						<FollowText>Following</FollowText>
-						<FollowNum>1</FollowNum>
+						<FollowNum>247</FollowNum>
 					</FollowCol>
 				</UpperHeaderRow>
 				<UsernameRow>
 					<UsernameText>Patrick</UsernameText>
 				</UsernameRow>
 				<BioRow>
-					<BioText>I'm Da Best</BioText>
+					<BioText>Bio here</BioText>
 				</BioRow>
 				<Post
 					Username="Perry"

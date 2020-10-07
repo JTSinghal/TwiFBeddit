@@ -1,5 +1,5 @@
 import React from "react";
-import { Content } from "../styles/postStyle";
+import { Content, ContentCol, UserTopicRow, UserTopicText, TitleRow, TitleText, ImageRow, ImagePic, BodyRow, BodyText, VotesRow, UpvoteCol, DownvoteCol, SaveCol, VotesCol, VotesText } from "../styles/postStyle";
 
 const Post = (props) => {
 	const {
@@ -13,7 +13,36 @@ const Post = (props) => {
 		userVote,
 	} = props;
 
-	return <Content>Post</Content>;
+	return <Content>
+					<ContentCol col={12}>
+						<UserTopicRow>
+							<UserTopicText>u/{Username}</UserTopicText>
+							<UserTopicText>r/{Topic}</UserTopicText>
+						</UserTopicRow>
+						<TitleRow>
+							<TitleText>{Title}</TitleText>
+						</TitleRow>
+						<ImageRow>
+							<ImagePic
+								src={Image}
+							/>
+						</ImageRow>
+						<BodyRow>
+							<BodyText>{Body}</BodyText>
+						</BodyRow>
+						<VotesRow>
+							<VotesCol col={4}>
+								<VotesText>Upvote</VotesText>
+							</VotesCol>
+							<VotesCol col={4}>
+								<VotesText>Downvote</VotesText>
+							</VotesCol>
+							<VotesCol col={4}>
+								<VotesText>Save Post</VotesText>
+							</VotesCol>
+						</VotesRow>
+					</ContentCol>
+				</Content>;
 };
 
 export default Post;
