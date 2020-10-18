@@ -20,9 +20,12 @@ export const UpperHeaderRow = styled(Row)``;
 export const ProfilePictureCol = styled(Col)``;
 
 export const ProfilePicture = styled.img`
+	float: left;
+	width:  100px;
+	height: 100px;
+	object-fit: cover;
 	border: 2px solid black;
 	border-radius: 50%;
-	width: 100%;
 `;
 
 export const FollowCol = styled(Col)`
