@@ -38,6 +38,21 @@ export const FollowText = styled.p`
 `;
 export const FollowNum = styled.p``;
 
+export const FollowButton = styled.button`
+	color: #3399FF;
+	font-family: "Helvetica";
+	font-size: 11pt;
+	background-color: #ffffff;
+	border: 1px solid;
+	border-color: #3399FF;
+	border-radius: 3px;
+	width: 85px;
+	height: 30px;
+	top: 50px;
+	left: 50px;
+	cursor: hand;
+`;
+
 export const UsernameRow = styled(Row)``;
 
 export const UsernameText = styled.p`
