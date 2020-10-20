@@ -102,7 +102,11 @@ export default function IndividualSignUp() {
 	};
 
 	const validatePassword = (value: string): string => {
-		const error = value ? "" : "You must enter a valid password";
+		let error = "";
+		if (value.length < 8 || !/[A-Z]/.test(value)) {
+			error =
+				"Password must have atleast 8 characters and one upper case letter";
+		}
 		setPasswordError(error);
 		return error;
 	};
@@ -153,6 +157,8 @@ export default function IndividualSignUp() {
 			// 	})
 			// 	.catch((err) => console.log("axios error: ", err));
 		} else {
+			console.log(emailValidationError);
+			console.log(passwordValidationError);
 			alert("Sign-in not successful. Please enter valid email and password.");
 		}
 	};
