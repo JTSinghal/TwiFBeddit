@@ -13,6 +13,8 @@ import {
 	UsernameText,
 	BioRow,
 	BioText,
+	LogoutRow,
+	LogoutButton
 } from "../styles/accountPageStyle";
 import Post from "../components/Post";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,6 +65,9 @@ const AccountPage = () => {
 				<BioRow>
 					<BioText>Purdue CS student</BioText>
 				</BioRow>
+				<LogoutRow>
+					<LogoutButton>Logout</LogoutButton>
+				</LogoutRow>
 				<Post
 					Username={username}
 					Title="Mac is Great"

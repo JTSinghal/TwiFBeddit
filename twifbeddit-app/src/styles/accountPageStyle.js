@@ -68,4 +68,28 @@ export const BioRow = styled(Row)``;
 
 export const BioText = styled.p``;
 
+export const LogoutRow = styled(Row)`
+    justify-content: left;
+`;
+
+export const LogoutButton = styled.button`
+    display: inline-block;
+    height: 38px;
+    padding: 0 30px;
+    color: white;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 2px;
+    background-color: #FF0000;
+    border: 1px solid #FF0000;
+    cursor: pointer;
+    box-sizing: border-box;
+`;
+
 export const Posts = styled(Row)``;
