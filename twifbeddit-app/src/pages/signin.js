@@ -180,6 +180,7 @@ export default function SignInSide() {
 			if (resp.error) {
 				console.log("Error Signing In");
 			} else {
+				console.log(resp);
 				dispatch(accountActions.signInOrSignUp(resp));
 				changeActiveScreen("LandingPage");
 			}

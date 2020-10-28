@@ -9,6 +9,7 @@ import {
 import { Form, FormGroup, FormControl, ButtonToolbar, Button } from "rsuite";
 import { useSelector } from "react-redux";
 import uploadPicture from "../util/uploadPicture";
+import makeNetworkCall from "../util/makeNetworkCall";
 
 const EditAccountPage = () => {
 	const [email, setEmail] = useState(""),
@@ -36,7 +37,7 @@ const EditAccountPage = () => {
 		if (password != confirmPassword) {
 			return "Passwords do not match";
 		}
-		return null;
+		return "";
 	};
 
 	const validateBio = (bio) => {
@@ -50,27 +51,44 @@ const EditAccountPage = () => {
 
 	const Submit = async (e) => {
 		e.preventDefault();
-		console.log(profPic);
-		uploadPicture(profPic, "profile");
 
 		const emailValidationError = validateEmail(email);
 		const passwordValidationError = validatePassword(password, confirmPassword);
 		const bioValidationError = validateBio(bio);
-		// if (emailValidationError) {
-		// 	alert(emailValidationError);
-		// } else if (passwordValidationError) {
-		// 	alert(passwordValidationError);
-		// } else if (bioValidationError) {
-		// 	alert(bioValidationError);
-		// } else {
-		// 	console.log("bitch");
-		// 	console.log(profPic);
-		// 	console.log(profPic.type);
-		// 	if (profPic) {
-		// 		uploadPicture(profPic, "profile");
-		// 	}
-		// 	//data is valid, send to db
-		// }
+		if (emailValidationError != "") {
+			alert(emailValidationError);
+		} else if (passwordValidationError != "") {
+			alert(passwordValidationError);
+		} else if (bioValidationError != "") {
+			alert(bioValidationError);
+		} else {
+			var uploadRsp;
+			if (profPic) {
+				uploadRsp = uploadPicture(profPic, "profile");
+			}
+			console.log(uploadRsp);
+			const params = {
+				email,
+				password,
+				profile_picture: uploadRsp.imageUrlForMongoDB,
+				bio,
+			};
+			console.log(params);
+			const resp = await makeNetworkCall({
+				HTTPmethod: "patch",
+				path: "users",
+				params,
+			});
+			if (resp.error) {
+				console.log("Error Updating Info");
+			} else {
+				console.log("sucess updating info", resp);
+				// dispatch(accountActions.signInOrSignUp(resp));
+				// changeActiveScreen("LandingPage");
+			}
+
+			//data is valid, send to db
+		}
 
 		// const newUserDetails = {
 		// 	user: {

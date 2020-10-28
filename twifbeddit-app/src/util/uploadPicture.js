@@ -3,7 +3,7 @@ import React from "react";
 import AWS from "aws-sdk";
 // import "https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js";
 
-const uploadPicture = (file, type) => {
+const uploadPicture = async (file, type) => {
 	const createUUID = () => {
 		var dt = new Date().getTime();
 		var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -35,9 +35,6 @@ const uploadPicture = (file, type) => {
 		".png"; // change this for image post or profile post
 	console.log(imageUrlForMongoDB);
 	const keyForS3Upload = `${type}/` + uuid + ".png";
-	console.log(keyForS3Upload);
-	console.log(file);
-
 	const params = {
 		Key: keyForS3Upload,
 		ContentType: file.type,
@@ -45,13 +42,13 @@ const uploadPicture = (file, type) => {
 	};
 	bucket.upload(params, (err, data) => {
 		if (err) {
+			console.log(err);
 			return { error: true };
 		} else {
-			return { data, uuid };
+			return { data, imageUrlForMongoDB };
 		}
 	});
-
-	return { error: true };
+	// return { error: true };
 };
 
 export default uploadPicture;

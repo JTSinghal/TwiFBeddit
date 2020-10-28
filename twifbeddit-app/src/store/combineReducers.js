@@ -9,13 +9,13 @@ import account from "../containers/AccountContainer/reducer";
 const navigationPersistConfig = {
 	key: "navigation",
 	storage,
-	blacklist: [],
+	blacklist: ["*"],
 };
 
 const accountPersistConfig = {
 	key: "account",
 	storage,
-	blacklist: [],
+	blacklist: ["*"],
 };
 
 const rootReducer = combineReducers({
