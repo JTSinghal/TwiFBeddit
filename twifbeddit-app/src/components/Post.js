@@ -1,5 +1,5 @@
 import React from "react";
-import { Content, ContentCol, UserTopicRow, UserTopicText, TitleRow, TitleText, ImageRow, ImagePic, BodyRow, BodyText, VotesRow, VotesCol, VotesText } from "../styles/postStyle";
+import { Content, ContentCol, UserTopicRow, UserTopicText, TitleRow, TitleText, ImageRow, ImagePic, BodyRow, BodyText, VotesRow, VotesCol, UpvoteButton, DownvoteButton, SaveButton } from "../styles/postStyle";
 
 const Post = (props) => {
 	const {
@@ -32,13 +32,13 @@ const Post = (props) => {
 			</BodyRow>
 			<VotesRow>
 				<VotesCol col={4}>
-					<VotesText>Upvote</VotesText>
+					<UpvoteButton>Upvote</UpvoteButton>
 				</VotesCol>
 				<VotesCol col={4}>
-					<VotesText>Downvote</VotesText>
+					<DownvoteButton>Downvote</DownvoteButton>
 				</VotesCol>
 				<VotesCol col={4}>
-					<VotesText>Save Post</VotesText>
+					<SaveButton>Save Post</SaveButton>
 				</VotesCol>
 			</VotesRow>
 		</ContentCol>
