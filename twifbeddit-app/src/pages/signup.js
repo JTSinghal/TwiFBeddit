@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
 		width: "100%", // Fix IE 11 issue.
 		marginTop: theme.spacing(3),
 	},
+	error: {
+		color: "red",
+	},
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
@@ -61,10 +64,11 @@ export default function IndividualSignUp() {
 	const [emailError, setEmailError] = useState("");
 	const [username, setUsername] = useState("patTest2");
 	const [usernameError, setUsernameError] = useState("");
-	const [password, setPassword] = useState("patTest2");
+	const [password, setPassword] = useState("");
 	const [passwordError, setPasswordError] = useState("");
 
 	const [subscribe, setSubscribe] = useState(false);
+	const [accept, setAccept] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -84,11 +88,15 @@ export default function IndividualSignUp() {
 
 	const onChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
 		setUsername(e.currentTarget.value);
-		validatePassword(e.currentTarget.value);
+		validateUsername(e.currentTarget.value);
 	};
 
 	const onChangeCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
 		setSubscribe(e.currentTarget.value);
+	};
+
+	const onChangeConditionsCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
+		setAccept(e.currentTarget.checked);
 	};
 
 	const validateEmail = (value: string): string => {
@@ -101,12 +109,18 @@ export default function IndividualSignUp() {
 		return error;
 	};
 
+	const validateUsername = (value: string): string => {
+		const error = value ? "" : "You must enter a valid Username";
+		setUsernameError(error);
+		return error;
+	};
+
 	const validatePassword = (value: string): string => {
-		let error = "";
-		if (value.length < 8 || !/[A-Z]/.test(value)) {
-			error =
-				"Password must have atleast 8 characters and one upper case letter";
-		}
+		const error = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z$&+,:;=?@#|'<>.^*()%!-]{8,}$/.test(
+			value
+		)
+			? ""
+			: "Must be 8 characters, 1 uppercase, 1 lowercase, 1 number";
 		setPasswordError(error);
 		return error;
 	};
@@ -116,50 +130,59 @@ export default function IndividualSignUp() {
 		console.log("submit");
 
 		const emailValidationError = validateEmail(email);
+		const usernameValidationError = validateUsername(username);
 		const passwordValidationError = validatePassword(password);
-		if (emailValidationError === "" && passwordValidationError === "") {
-			const newUserDetails = {
-				user: {
-					password: password,
-					subscribed: subscribe,
-				},
-			};
-			//setSubmitResult(result);
-			//setSubmitted(true);
-			const resp = await makeNetworkCall({
-				HTTPmethod: "post",
-				path: "users",
-				data: {
-					email,
-					username,
-					password,
-				},
-			});
-			if (resp.error) {
-				console.log("Error Signing Up");
-			} else {
-				dispatch(accountActions.setUser(resp));
-				changeActiveScreen("LandingPage");
-			}
+		if (accept) {
+			if (
+				emailValidationError === "" &&
+				usernameValidationError === "" &&
+				passwordValidationError === ""
+			) {
+				const newUserDetails = {
+					user: {
+						password: password,
+						subscribed: subscribe,
+					},
+				};
+				//setSubmitResult(result);
+				//setSubmitted(true);
+				const resp = await makeNetworkCall({
+					HTTPmethod: "post",
+					path: "users",
+					data: {
+						email,
+						username,
+						password,
+					},
+				});
+				if (resp.error) {
+					console.log("Error Signing Up");
+				} else {
+					dispatch(accountActions.signInOrSignUp(resp));
+					changeActiveScreen("LandingPage");
+				}
 
-			// axios
-			// 	.post("http://localhost:5000/api/unverified/new", newUserDetails)
-			// 	.then((res) => {
-			// 		if (res.data.errors) {
-			// 			console.log(res.data);
-			// 			if (res.data.errors.email === "is already taken.") {
-			// 				alert("Email is already taken. Please sign-in instead!");
-			// 			}
-			// 		} else {
-			// 			alert("Confirmation email sent");
-			// 			window.location = "/verification"; //// TODO:
-			// 		}
-			// 	})
-			// 	.catch((err) => console.log("axios error: ", err));
+				// axios
+				// 	.post("http://localhost:5000/api/unverified/new", newUserDetails)
+				// 	.then((res) => {
+				// 		if (res.data.errors) {
+				// 			console.log(res.data);
+				// 			if (res.data.errors.email === "is already taken.") {
+				// 				alert("Email is already taken. Please sign-in instead!");
+				// 			}
+				// 		} else {
+				// 			alert("Confirmation email sent");
+				// 			window.location = "/verification"; //// TODO:
+				// 		}
+				// 	})
+				// 	.catch((err) => console.log("axios error: ", err));
+			} else {
+				alert(
+					"Sign-in not successful. Please enter valid email, username, and password."
+				);
+			}
 		} else {
-			console.log(emailValidationError);
-			console.log(passwordValidationError);
-			alert("Sign-in not successful. Please enter valid email and password.");
+			alert("You must accept terms and conditions to sign-up.");
 		}
 	};
 
@@ -185,7 +208,7 @@ export default function IndividualSignUp() {
 								value={email}
 								onChange={onChangeEmail}
 							/>
-							<span className="error">{emailError}</span>
+							<span className={classes.error}>{emailError}</span>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
@@ -199,7 +222,7 @@ export default function IndividualSignUp() {
 								value={username}
 								onChange={onChangeUsername}
 							/>
-							<span className="error">{usernameError}</span>
+							<span className={classes.error}>{usernameError}</span>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
@@ -214,12 +237,18 @@ export default function IndividualSignUp() {
 								password={password}
 								onChange={onChangePassword}
 							/>
-							<span className="error">{passwordError}</span>
+							<span className={classes.error}>{passwordError}</span>
 						</Grid>
 						<Grid item xs={12}>
 							<FormControlLabel
-								control={<Checkbox value="allowExtraEmails" color="primary" />}
-								label="I want to receive inspiration, marketing promotions and updates via email."
+								control={
+									<Checkbox
+										onChange={onChangeConditionsCheckbox}
+										value="allowExtraEmails"
+										color="primary"
+									/>
+								}
+								label="I have read and agreed to the terms and conditions."
 							/>
 						</Grid>
 					</Grid>
