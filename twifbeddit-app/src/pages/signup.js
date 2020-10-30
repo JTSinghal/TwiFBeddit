@@ -14,7 +14,6 @@ import Container from "@material-ui/core/Container";
 
 import { useState } from "react";
 import Copyright from "../components/copyright.component.js";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import * as navigationActions from "../containers/NavigationContainer/actions";
 import makeNetworkCall from "../util/makeNetworkCall.js";
@@ -127,7 +126,6 @@ export default function IndividualSignUp() {
 
 	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log("submit");
 
 		const emailValidationError = validateEmail(email);
 		const usernameValidationError = validateUsername(username);
@@ -158,7 +156,7 @@ export default function IndividualSignUp() {
 				if (resp.error) {
 					console.log("Error Signing Up");
 				} else {
-					dispatch(accountActions.signInOrSignUp(resp));
+					dispatch(accountActions.setUser(resp));
 					changeActiveScreen("LandingPage");
 				}
 

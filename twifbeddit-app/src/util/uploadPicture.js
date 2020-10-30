@@ -33,7 +33,6 @@ const uploadPicture = async (file, type) => {
 		`${type}/` +
 		uuid +
 		".png"; // change this for image post or profile post
-	console.log(imageUrlForMongoDB);
 	const keyForS3Upload = `${type}/` + uuid + ".png";
 	const params = {
 		Key: keyForS3Upload,
