@@ -7,9 +7,11 @@ import {
 	Title,
 } from "../styles/editAccountPageStyle";
 import { Form, FormGroup, FormControl, ButtonToolbar, Button } from "rsuite";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import uploadPicture from "../util/uploadPicture";
 import makeNetworkCall from "../util/makeNetworkCall";
+import * as navigationActions from "../containers/NavigationContainer/actions";
+import * as accountActions from "../containers/AccountContainer/actions";
 
 const EditAccountPage = () => {
 	const [email, setEmail] = useState(""),
@@ -18,7 +20,9 @@ const EditAccountPage = () => {
 		[bio, setBio] = useState(""),
 		username = useSelector((state) => state.account.username),
 		storeEmail = useSelector((state) => state.account.email),
-		[profPic, setProfPic] = useState("");
+		cookie = useSelector((state) => state.account.cookie),
+		dispatch = useDispatch(),
+		[profilePic, setProfilePic] = useState("");
 
 	const validateEmail = (value) => {
 		const error = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
@@ -31,7 +35,12 @@ const EditAccountPage = () => {
 	};
 
 	const validatePassword = (password, confirmPassword) => {
-		if (password.length < 8 || !/[A-Z]/.test(password)) {
+		if (
+			password.length < 8 ||
+			!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z$&+,:;=?@#|'<>.^*()%!-]{8,}$/.test(
+				password
+			)
+		) {
 			return "Password must have atleast 8 characters and one upper case letter";
 		}
 		if (password != confirmPassword) {
@@ -46,7 +55,11 @@ const EditAccountPage = () => {
 
 	const picChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		// event.persist();
-		setProfPic(event.target.files[0]);
+		setProfilePic(event.target.files[0]);
+	};
+
+	const changeActiveScreen = (screen) => {
+		dispatch(navigationActions.changeCurrentPage(screen));
 	};
 
 	const Submit = async (e) => {
@@ -61,58 +74,32 @@ const EditAccountPage = () => {
 			alert(passwordValidationError);
 		} else if (bioValidationError != "") {
 			alert(bioValidationError);
+		} else if (!profilePic) {
+			alert("Please Include a Profile Picture");
 		} else {
-			var uploadRsp;
-			if (profPic) {
-				uploadRsp = uploadPicture(profPic, "profile");
-			}
-			console.log(uploadRsp);
+			//data is valid, send to db
+			const uploadRsp = await uploadPicture(profilePic, "profile");
+
 			const params = {
 				email,
 				password,
 				profile_picture: uploadRsp.imageUrlForMongoDB,
 				bio,
 			};
-			console.log(params);
 			const resp = await makeNetworkCall({
 				HTTPmethod: "patch",
 				path: "users",
 				params,
+				cookie,
 			});
 			if (resp.error) {
 				console.log("Error Updating Info");
 			} else {
 				console.log("sucess updating info", resp);
-				// dispatch(accountActions.signInOrSignUp(resp));
-				// changeActiveScreen("LandingPage");
+				dispatch(accountActions.setUser(resp));
+				changeActiveScreen("Account");
 			}
-
-			//data is valid, send to db
 		}
-
-		// const newUserDetails = {
-		// 	user: {
-		// 		password: password,
-		// 		subscribed: subscribe,
-		// 	},
-		// };
-		// //setSubmitResult(result);
-		// //setSubmitted(true);
-		// const resp = await makeNetworkCall({
-		// 	HTTPmethod: "post",
-		// 	path: "users",
-		// 	data: {
-		// 		email,
-		// 		username,
-		// 		password,
-		// 	},
-		// });
-		// if (resp.error) {
-		// 	console.log("Error Signing Up");
-		// } else {
-		// 	dispatch(accountActions.signInOrSignUp(resp));
-		// 	changeActiveScreen("LandingPage");
-		// }
 	};
 	return (
 		<Col col={12}>
@@ -130,7 +117,7 @@ const EditAccountPage = () => {
 						</FormGroup>
 						<FormGroup>
 							<MyControlLabel>Profile Picture</MyControlLabel>
-							{/* <FormControl name="profPic" type="file" onChange={picChange} /> */}
+							{/* <FormControl name="profilePic" type="file" onChange={picChange} /> */}
 							<input
 								type="file"
 								accept="image/png"

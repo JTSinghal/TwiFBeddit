@@ -181,7 +181,7 @@ export default function SignInSide() {
 				console.log("Error Signing In");
 			} else {
 				console.log(resp);
-				dispatch(accountActions.signInOrSignUp(resp));
+				dispatch(accountActions.setUser(resp));
 				changeActiveScreen("LandingPage");
 			}
 			// axios

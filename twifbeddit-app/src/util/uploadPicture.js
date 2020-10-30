@@ -43,11 +43,12 @@ const uploadPicture = async (file, type) => {
 	bucket.upload(params, (err, data) => {
 		if (err) {
 			console.log(err);
-			return { error: true };
+			return { error: true, imageUrlForMongoDB };
 		} else {
 			return { data, imageUrlForMongoDB };
 		}
 	});
+	return { error: true, imageUrlForMongoDB };
 	// return { error: true };
 };
 

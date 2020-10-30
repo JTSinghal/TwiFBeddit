@@ -138,7 +138,7 @@ export default function IndividualSignUp() {
 			if (resp.error) {
 				console.log("Error Signing Up");
 			} else {
-				dispatch(accountActions.signInOrSignUp(resp));
+				dispatch(accountActions.setUser(resp));
 				changeActiveScreen("LandingPage");
 			}
 
