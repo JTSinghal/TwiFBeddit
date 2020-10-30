@@ -1,7 +1,6 @@
 import { assignWith, create } from "lodash";
 import React from "react";
 import AWS from "aws-sdk";
-// import "https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js";
 
 const uploadPicture = async (file, type) => {
 	const createUUID = () => {
@@ -42,13 +41,11 @@ const uploadPicture = async (file, type) => {
 	bucket.upload(params, (err, data) => {
 		if (err) {
 			console.log(err);
-			return { error: true, imageUrlForMongoDB };
+			return { error: true };
 		} else {
 			return { data, imageUrlForMongoDB };
 		}
 	});
-	return { error: true, imageUrlForMongoDB };
-	// return { error: true };
 };
 
 export default uploadPicture;

@@ -9,20 +9,13 @@ export default async function makeNetworkCall(props) {
 			method: `${HTTPmethod}`,
 			headers,
 			params: params,
-			// data: {
-			// 	// status: 200,
-			// },
 			data: JSON.stringify(data),
 		});
-
-		// console.log(resp);
 		const responseData = resp.data;
 
 		if ("errors" in responseData) {
 			console.log(responseData);
 		}
-		// console.log(responseData);
-		// console.log(resp.headers);
 		return responseData;
 	} catch (error) {
 		console.log("there was an error ", error);
