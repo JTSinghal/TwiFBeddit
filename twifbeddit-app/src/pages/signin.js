@@ -147,7 +147,11 @@ export default function SignInSide() {
 	};
 
 	const validatePassword = (value: string): string => {
-		const error = value ? "" : "You must enter a valid password";
+		const error = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z$&+,:;=?@#|'<>.^*()%!-]{8,}$/.test(
+			value
+		)
+			? ""
+			: "Must be 8 characters, 1 uppercase, 1 lowercase, 1 number";
 		setPasswordError(error);
 		return error;
 	};
@@ -177,8 +181,12 @@ export default function SignInSide() {
 					password,
 				},
 			});
-			dispatch(accountActions.signInOrSignUp(resp));
-			changeActiveScreen("LandingPage");
+			if (resp.error) {
+				console.log("Error Signing In");
+			} else {
+				dispatch(accountActions.setUser(resp));
+				changeActiveScreen("LandingPage");
+			}
 			// axios
 			// 	.post("http://localhost:5000/api/users/login", userDetails)
 			// 	.then((res) => {
@@ -261,17 +269,6 @@ export default function SignInSide() {
 								onChange={onChangePassword}
 							/>
 							<span className="error">{passwordError}</span>
-						</Grid>
-						<Grid item xs={12}>
-							<FormControlLabel
-								control={
-									<Checkbox //value={rememberMe}
-										//onChange={onChangeCheckbox}
-										color="primary"
-									/>
-								}
-								label="Remember me"
-							/>
 						</Grid>
 					</Grid>
 					<Button

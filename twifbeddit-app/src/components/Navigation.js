@@ -22,11 +22,11 @@ import {
 	faUserCircle,
 	faCog,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navigation = (props) => {
 	const dispatch = useDispatch(),
 		username = useSelector((state) => state.account.username),
+		activeScreen = useSelector((state) => state.navigation.currentPage),
 		[isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const changeActiveScreen = (screen) => {
@@ -54,16 +54,28 @@ const Navigation = (props) => {
 				{username != "" ? (
 					<Col col={4}>
 						<IconContainer>
-							<NavTextContent onClick={() => changeActiveScreen("Home")}>
+							<NavTextContent
+								onClick={() => changeActiveScreen("Home")}
+								currentPage={activeScreen == "Home"}
+							>
 								<NavigationIcon icon={faHome} />
 							</NavTextContent>
-							<NavTextContent onClick={() => changeActiveScreen("Post")}>
+							<NavTextContent
+								onClick={() => changeActiveScreen("Post")}
+								currentPage={activeScreen == "Post"}
+							>
 								<NavigationIcon icon={faCommentAlt} />
 							</NavTextContent>
-							<NavTextContent onClick={() => changeActiveScreen("Account")}>
+							<NavTextContent
+								onClick={() => changeActiveScreen("Account")}
+								currentPage={activeScreen == "Account"}
+							>
 								<NavigationIcon icon={faUserCircle} />
 							</NavTextContent>
-							<NavTextContent onClick={() => changeActiveScreen("EditAccount")}>
+							<NavTextContent
+								onClick={() => changeActiveScreen("EditAccountPage")}
+								currentPage={activeScreen == "EditAccountPage"}
+							>
 								<NavigationIcon icon={faCog} />
 							</NavTextContent>
 						</IconContainer>
@@ -71,10 +83,16 @@ const Navigation = (props) => {
 				) : (
 					<Col col={4}>
 						<IconContainer>
-							<NavTextContent onClick={() => changeActiveScreen("SignIn")}>
+							<NavTextContent
+								onClick={() => changeActiveScreen("SignIn")}
+								currentPage={activeScreen == "SignIn"}
+							>
 								<NavigationText>Sign In</NavigationText>
 							</NavTextContent>
-							<NavTextContent onClick={() => changeActiveScreen("SignUp")}>
+							<NavTextContent
+								onClick={() => changeActiveScreen("SignUp")}
+								currentPage={activeScreen == "SignUp"}
+							>
 								<NavigationText>Sign Up</NavigationText>
 							</NavTextContent>
 						</IconContainer>

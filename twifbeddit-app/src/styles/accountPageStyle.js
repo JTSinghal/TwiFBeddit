@@ -21,7 +21,7 @@ export const ProfilePictureCol = styled(Col)``;
 
 export const ProfilePicture = styled.img`
 	float: left;
-	width:  100px;
+	width: 100px;
 	height: 100px;
 	object-fit: cover;
 	border: 2px solid black;
@@ -42,12 +42,12 @@ export const FollowText = styled.p`
 export const FollowNum = styled.p``;
 
 export const FollowButton = styled.button`
-	color: #3399FF;
+	color: #3399ff;
 	font-family: "Helvetica";
 	font-size: 11pt;
 	background-color: #ffffff;
 	border: 1px solid;
-	border-color: #3399FF;
+	border-color: #3399ff;
 	border-radius: 3px;
 	width: 85px;
 	height: 30px;
@@ -66,30 +66,32 @@ export const UsernameText = styled.p`
 
 export const BioRow = styled(Row)``;
 
-export const BioText = styled.p``;
+export const BioText = styled.pre`
+	font-family: "Montserrat", sans-serif;
+`;
 
 export const LogoutRow = styled(Row)`
-    justify-content: left;
+	justify-content: left;
 `;
 
 export const LogoutButton = styled.button`
-    display: inline-block;
-    height: 38px;
-    padding: 0 30px;
-    color: white;
-    text-align: center;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 38px;
-    letter-spacing: .1rem;
-    text-transform: uppercase;
-    text-decoration: none;
-    white-space: nowrap;
-    border-radius: 2px;
-    background-color: #FF0000;
-    border: 1px solid #FF0000;
-    cursor: pointer;
-    box-sizing: border-box;
+	display: inline-block;
+	height: 38px;
+	padding: 0 30px;
+	color: white;
+	text-align: center;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 38px;
+	letter-spacing: 0.1rem;
+	text-transform: uppercase;
+	text-decoration: none;
+	white-space: nowrap;
+	border-radius: 2px;
+	background-color: #ff0000;
+	border: 1px solid #ff0000;
+	cursor: pointer;
+	box-sizing: border-box;
 `;
 
 export const Posts = styled(Row)``;

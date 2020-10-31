@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Page,
 	Content,
@@ -19,14 +19,34 @@ import {
 import Post from "../components/Post";
 import { useDispatch, useSelector } from "react-redux";
 import * as accountActions from "../containers/AccountContainer/actions";
+import makeNetworkCall from "../util/makeNetworkCall";
+import * as GlobalActions from "../containers/GlobalContainer/actions";
+import _ from "lodash";
 
 const AccountPage = () => {
-	const { username, profile_pictrue, bio, following, followers } = useSelector(
+	const { username, profile_picture, bio, following, followers } = useSelector(
 			(state) => state.account
 		),
+		dispatch = useDispatch(),
+		posts = useSelector((state) => state.global.posts),
 		[isCurUser, setIsCurUser] = useState(false),
-		[isFollowing, setIsFollowing] = useState(false),
-		dispatch = useDispatch();
+		[isFollowing, setIsFollowing] = useState(false);
+
+	useEffect(() => {
+		const getPosts = async () => {
+			if (username) {
+				const resp = await makeNetworkCall({
+					HTTPmethod: "get",
+					path: "posts",
+					params: {
+						author: username,
+					},
+				});
+				dispatch(GlobalActions.setPosts(resp.posts));
+			}
+		};
+		getPosts();
+	}, [username]);
 
 	const followOrUnfollow = (type) => {
 		if (type === "Unfollow") {
@@ -38,14 +58,12 @@ const AccountPage = () => {
 		}
 	};
 
-	const logout = () => {};
-
 	return (
 		<Page col={12}>
 			<Content>
 				<UpperHeaderRow>
 					<ProfilePictureCol col={3}>
-						<ProfilePicture alt="profilePicture" src={profile_pictrue} />
+						<ProfilePicture alt="profilePicture" src={profile_picture} />
 					</ProfilePictureCol>
 					<FollowCol col={4} offset={1}>
 						<FollowText>Followers</FollowText>
@@ -77,22 +95,21 @@ const AccountPage = () => {
 					<UsernameText>{username}</UsernameText>
 				</UsernameRow>
 				<BioRow>
-					<BioText>Purdue CS student</BioText>
+					<BioText>{bio}</BioText>
 				</BioRow>
-				<LogoutRow>
-					<LogoutButton>Logout</LogoutButton>
-				</LogoutRow>
-				<Post
-					Username={username}
-					Title="Mac is Great"
-					Topic="Music"
-					Body="Faces is a great project!!!!!!"
-					Upvotes="69"
-					Downvotes="69"
-					userVote="upvote"
-					Image="https://www.rollingstone.com/wp-content/uploads/2018/11/mac-miller-left-behind.jpg?resize=1800,1200&w=450"
-					postId="5f7e0994ed3b58000768ab0f"
-				></Post>
+				{_.map(posts, (post) => {
+					return (
+						<Post
+							Username={post.author}
+							Title={post.title}
+							Topic={post.topic}
+							Body={post.text}
+							Upvotes={post.upvotes}
+							Downvotes={post.downvotes}
+							Image={post.image_url}
+						></Post>
+					);
+				})}
 			</Content>
 		</Page>
 	);
