@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
 	Page,
 	Content,
@@ -14,7 +14,7 @@ import {
 	BioRow,
 	BioText,
 	LogoutRow,
-	LogoutButton
+	LogoutButton,
 } from "../styles/accountPageStyle";
 import Post from "../components/Post";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,8 +22,8 @@ import * as accountActions from "../containers/AccountContainer/actions";
 
 const AccountPage = () => {
 	const { username, profile_pictrue, bio, following, followers } = useSelector(
-		(state) => state.account
-	),
+			(state) => state.account
+		),
 		[isCurUser, setIsCurUser] = useState(false),
 		[isFollowing, setIsFollowing] = useState(false),
 		dispatch = useDispatch();
@@ -36,7 +36,9 @@ const AccountPage = () => {
 			dispatch(accountActions.followUser(username));
 			setIsFollowing(true);
 		}
-	}
+	};
+
+	const logout = () => {};
 
 	return (
 		<Page col={12}>
@@ -48,11 +50,23 @@ const AccountPage = () => {
 					<FollowCol col={4} offset={1}>
 						<FollowText>Followers</FollowText>
 						<FollowNum> {followers} </FollowNum>
-						{
-							isCurUser ? null : 
-							(isFollowing ? <FollowButton onClick={ () => {followOrUnfollow("Unfollow")} }>Unfollow</FollowButton> : 
-							<FollowButton onClick={ () => {followOrUnfollow("Follow")} }>Follow</FollowButton>)
-						}
+						{isCurUser ? null : isFollowing ? (
+							<FollowButton
+								onClick={() => {
+									followOrUnfollow("Unfollow");
+								}}
+							>
+								Unfollow
+							</FollowButton>
+						) : (
+							<FollowButton
+								onClick={() => {
+									followOrUnfollow("Follow");
+								}}
+							>
+								Follow
+							</FollowButton>
+						)}
 					</FollowCol>
 					<FollowCol col={4}>
 						<FollowText>Following</FollowText>
@@ -77,6 +91,7 @@ const AccountPage = () => {
 					Downvotes="69"
 					userVote="upvote"
 					Image="https://www.rollingstone.com/wp-content/uploads/2018/11/mac-miller-left-behind.jpg?resize=1800,1200&w=450"
+					postId="5f7e0994ed3b58000768ab0f"
 				></Post>
 			</Content>
 		</Page>
