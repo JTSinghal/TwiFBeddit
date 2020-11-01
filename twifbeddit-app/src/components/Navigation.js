@@ -33,6 +33,11 @@ const Navigation = (props) => {
 		dispatch(navigationActions.changeCurrentPage(screen));
 	};
 
+	const updateUsernameForAccount = (username) => {
+		dispatch(navigationActions.setUsernameForAccountPage(username));
+		// dispatch(navigationActions.setUsernameForAccountPage("alex1"));
+	};
+
 	return (
 		<Content col={12}>
 			<NavigationBar>
@@ -67,7 +72,10 @@ const Navigation = (props) => {
 								<NavigationIcon icon={faCommentAlt} />
 							</NavTextContent>
 							<NavTextContent
-								onClick={() => changeActiveScreen("Account")}
+								onClick={() => {
+									changeActiveScreen("Account");
+									updateUsernameForAccount(username);
+								}}
 								currentPage={activeScreen == "Account"}
 							>
 								<NavigationIcon icon={faUserCircle} />

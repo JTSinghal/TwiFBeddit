@@ -18,6 +18,8 @@ import {
 	DownvoteButton,
 	SaveButton,
 } from "../styles/postStyle";
+import { useSelector, useDispatch } from "react-redux";
+import * as navigationActions from "../containers/NavigationContainer/actions";
 
 const Post = (props) => {
 	const {
@@ -29,52 +31,46 @@ const Post = (props) => {
 		Upvotes,
 		Downvotes,
 		userVote,
-		postId,
+		PostId,
 	} = props;
 
-	const [curVote, setCurVote] = useState("");
+	const [curVote, setCurVote] = useState(""),
+		cookie = useSelector((state) => state.account.cookie),
+		[loading, setLoading] = useState(false),
+		dispatch = useDispatch();
 
-	const vote = (voteType) => {
-		if (voteType !== curVote) {
-			//their first vote or switching vote
-			console.log(voteType, postId);
-			const response = makeNetworkCall({
-				HTTPMethod: "post",
-				path: "votes",
-				params: {
-					postId,
-					action: voteType,
-				},
-			});
-			setCurVote(voteType);
-		} else {
-			//undoing their current vote
-			let unvoteType;
-			if (voteType === "up") {
-				unvoteType = "unup";
-			} else {
-				unvoteType = "undown";
-			}
-			console.log(unvoteType, postId);
-			const response = makeNetworkCall({
-				HTTPMethod: "post",
-				path: "votes",
-				params: {
-					postId,
-					action: unvoteType,
-				},
-			});
-			setCurVote("");
+	const vote = async (command) => {
+		const voteType = curVote === command ? "un" + command : command;
+		const oldCurVote = curVote;
+		setCurVote(voteType);
+		setLoading(true);
+		const resp = await makeNetworkCall({
+			HTTPmethod: "post",
+			path: "votes",
+			params: {
+				postId: PostId,
+				action: voteType,
+			},
+			cookie,
+		});
+		if (resp.error) {
+			setCurVote(oldCurVote);
 		}
+		setLoading(false);
 	};
 
-	const savePost = () => {};
+	const switchToAuthorAccount = () => {
+		dispatch(navigationActions.setUsernameForAccountPage(Username));
+		dispatch(navigationActions.changeCurrentPage("Account"));
+	};
 
 	return (
 		<Content>
 			<ContentCol col={12}>
 				<UserTopicRow>
-					<UserTopicText>u/{Username}</UserTopicText>
+					<UserTopicText onClick={() => switchToAuthorAccount()}>
+						u/{Username}
+					</UserTopicText>
 					<UserTopicText>r/{Topic}</UserTopicText>
 				</UserTopicRow>
 				<TitleRow>
@@ -88,11 +84,13 @@ const Post = (props) => {
 				</BodyRow>
 				<VotesRow>
 					<VotesCol col={4}>
-						<UpvoteButton onClick={() => vote("up")}>Upvote</UpvoteButton>
+						<UpvoteButton disabled={loading} onClick={() => vote("up")}>
+							{curVote === "up" ? "undo UpVote" : "Upvote"}
+						</UpvoteButton>
 					</VotesCol>
 					<VotesCol col={4}>
-						<DownvoteButton onClick={() => vote("down")}>
-							Downvote
+						<DownvoteButton disabled={loading} onClick={() => vote("down")}>
+							{curVote === "down" ? "undo Downvote" : "Downvote"}
 						</DownvoteButton>
 					</VotesCol>
 					<VotesCol col={4}>

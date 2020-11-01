@@ -21,41 +21,82 @@ import { useDispatch, useSelector } from "react-redux";
 import * as accountActions from "../containers/AccountContainer/actions";
 import makeNetworkCall from "../util/makeNetworkCall";
 import * as GlobalActions from "../containers/GlobalContainer/actions";
+import * as navigationActions from "../containers/NavigationContainer/actions";
 import _ from "lodash";
 
 const AccountPage = () => {
-	const { username, profile_picture, bio, following, followers } = useSelector(
-			(state) => state.account
+	const currentAccount = useSelector((state) => state.account),
+		{ usernameForAccountPage, userForAccountPage } = useSelector(
+			(state) => state.navigation
 		),
 		dispatch = useDispatch(),
 		posts = useSelector((state) => state.global.posts),
-		[isCurUser, setIsCurUser] = useState(false),
+		[isCurUser, setIsCurUser] = useState(true),
 		[isFollowing, setIsFollowing] = useState(false);
 
 	useEffect(() => {
 		const getPosts = async () => {
-			if (username) {
+			if (currentAccount.username) {
+				if (currentAccount.username === usernameForAccountPage) {
+					dispatch(navigationActions.setUserForAccountPage(currentAccount));
+				} else {
+					const userDataResp = await makeNetworkCall({
+						HTTPmethod: "get",
+						path: "users",
+						params: {
+							username: usernameForAccountPage,
+						},
+					});
+					dispatch(navigationActions.setUserForAccountPage(userDataResp));
+					setIsCurUser(false);
+					setIsFollowing(
+						currentAccount.following.includes(usernameForAccountPage)
+					);
+				}
 				const resp = await makeNetworkCall({
 					HTTPmethod: "get",
 					path: "posts",
 					params: {
-						author: username,
+						author: usernameForAccountPage,
 					},
 				});
 				dispatch(GlobalActions.setPosts(resp.posts));
 			}
 		};
 		getPosts();
-	}, [username]);
+	}, [currentAccount.username]);
+
+	const changeActiveScreen = (screen) => {
+		dispatch(navigationActions.changeCurrentPage(screen));
+	};
 
 	const followOrUnfollow = (type) => {
-		if (type === "Unfollow") {
-			dispatch(accountActions.unfollowUser(username));
-			setIsFollowing(false);
-		} else {
-			dispatch(accountActions.followUser(username));
-			setIsFollowing(true);
+		if (currentAccount.username === "") {
+			changeActiveScreen("SignUp");
+			return;
 		}
+		let params = {};
+		if (type === "Unfollow") {
+			dispatch(navigationActions.unfollowUserOnAccountPage());
+			dispatch(accountActions.unfollowUser(usernameForAccountPage));
+			setIsFollowing(false);
+			params = {
+				usernameToUnfollow: usernameForAccountPage,
+			};
+		} else {
+			dispatch(navigationActions.followUserOnAccountPage());
+			dispatch(accountActions.followUser(usernameForAccountPage));
+			setIsFollowing(true);
+			params = {
+				usernameToFollow: usernameForAccountPage,
+			};
+		}
+		makeNetworkCall({
+			HTTPmethod: "patch",
+			path: "users",
+			params,
+			cookie: currentAccount.cookie,
+		});
 	};
 
 	return (
@@ -63,11 +104,14 @@ const AccountPage = () => {
 			<Content>
 				<UpperHeaderRow>
 					<ProfilePictureCol col={3}>
-						<ProfilePicture alt="profilePicture" src={profile_picture} />
+						<ProfilePicture
+							alt="profilePicture"
+							src={userForAccountPage.profile_picture}
+						/>
 					</ProfilePictureCol>
 					<FollowCol col={4} offset={1}>
 						<FollowText>Followers</FollowText>
-						<FollowNum> {followers} </FollowNum>
+						<FollowNum> {userForAccountPage.followers} </FollowNum>
 						{isCurUser ? null : isFollowing ? (
 							<FollowButton
 								onClick={() => {
@@ -88,18 +132,19 @@ const AccountPage = () => {
 					</FollowCol>
 					<FollowCol col={4}>
 						<FollowText>Following</FollowText>
-						<FollowNum> {following.length} </FollowNum>
+						<FollowNum> {userForAccountPage.following.length} </FollowNum>
 					</FollowCol>
 				</UpperHeaderRow>
 				<UsernameRow>
-					<UsernameText>{username}</UsernameText>
+					<UsernameText>{userForAccountPage.username}</UsernameText>
 				</UsernameRow>
 				<BioRow>
-					<BioText>{bio}</BioText>
+					<BioText>{userForAccountPage.bio}</BioText>
 				</BioRow>
 				{_.map(posts, (post) => {
 					return (
 						<Post
+							key={post._id}
 							Username={post.author}
 							Title={post.title}
 							Topic={post.topic}
@@ -107,6 +152,7 @@ const AccountPage = () => {
 							Upvotes={post.upvotes}
 							Downvotes={post.downvotes}
 							Image={post.image_url}
+							PostId={post._id}
 						></Post>
 					);
 				})}
