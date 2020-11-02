@@ -151,7 +151,7 @@ const EditAccountPage = () => {
 					/>
 					{"  "}
 					Once your account has been deleted there is no getting it back. This
-					is perminant. Are you sure you want to Delete Your Account?
+					is permanent. Are you sure you want to Delete Your Account?
 				</Modal.Body>
 				<Modal.Footer>
 					<MyButtonToolbar>
