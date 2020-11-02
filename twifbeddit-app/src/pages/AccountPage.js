@@ -15,6 +15,8 @@ import {
 	BioText,
 	LogoutRow,
 	LogoutButton,
+	TabsRow,
+	Tab,
 } from "../styles/accountPageStyle";
 import Post from "../components/Post";
 import { useDispatch, useSelector } from "react-redux";
@@ -141,6 +143,11 @@ const AccountPage = () => {
 				<BioRow>
 					<BioText>{userForAccountPage.bio}</BioText>
 				</BioRow>
+				<TabsRow>
+					<Tab>Posts</Tab>
+					<Tab>Comments and Interactions</Tab>
+					<Tab>Saved Posts</Tab>
+				</TabsRow>
 				{_.map(posts, (post) => {
 					return (
 						<Post

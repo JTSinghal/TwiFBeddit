@@ -94,4 +94,18 @@ export const LogoutButton = styled.button`
 	box-sizing: border-box;
 `;
 
+export const TabsRow = styled(Row)`
+	justify-content: space-around;
+`;
+
+export const Tab = styled.button`
+	border: 1px solid #00acee;
+	background-color: #bfe7ff;
+	padding: 10px 24px;
+	border-radius: 8px;
+	width: 33%;
+	font-size: 18px;
+	color: #242424;
+`;
+
 export const Posts = styled(Row)``;
