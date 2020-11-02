@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Navigation from "./components/Navigation";
 import EditAccountPage from "./pages/EditAccountPage";
 import AccountPage from "./pages/AccountPage";
+import PostPage from "./pages/PostPage";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import SignIn from "./pages/signin.js";
@@ -12,6 +13,8 @@ import VerificationInstructions from "./components/verificationInstructions.comp
 import Verify from "./components/verify.component";
 
 import SignUp from "./pages/signup.js";
+
+import TopicResults from "./pages/topicResults.js";
 
 const App = (props) => {
 	const currentPage = useSelector((state) => state.navigation.currentPage);
@@ -26,15 +29,22 @@ const App = (props) => {
 
 				{currentPage === "SignUp" && <SignUp />}
 
+				{currentPage === "EditAccountPage" && <EditAccountPage />}
+
 				{currentPage === "Account" && <AccountPage />}
 
-				{currentPage === "EditAccountPage" && <EditAccountPage />}
+				{currentPage === "Post" && <PostPage />}
 
 				{/* <Route path="/signin" component={SignIn} /> */}
 				<Route path="/verification" component={VerificationInstructions} />
 				<Route path="/verify/:id" component={Verify} />
 
 				{/* <Route path="/signup" component={SignUp} /> */}
+
+				{/*<Route path="/topic/:topic" component={TopicResults} />*/}
+
+				{/*currentPage === "SearchResults" && <TopicResults />*/}
+				{currentPage === "SearchResults" && <TopicResults />}
 			</div>
 		</Router>
 	);

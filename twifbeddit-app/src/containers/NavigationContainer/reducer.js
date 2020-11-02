@@ -12,6 +12,7 @@ const initalState = {
 		savedPosts: [],
 		bio: "",
 	},
+	searchRequest: "",
 };
 
 export default function startReducer(state = initalState, action) {
@@ -54,6 +55,13 @@ export default function startReducer(state = initalState, action) {
 					...state.userForAccountPage,
 					followers: state.userForAccountPage.followers - 1,
 				},
+			};
+		}
+
+		case Constants.SEARCH_REQUEST: {
+			return {
+				...state,
+				searchRequest: action.searchRequest,
 			};
 		}
 

@@ -32,3 +32,10 @@ export function unfollowUserOnAccountPage() {
 		type: Constants.UNFOLLOW_USER_ON_ACCOUNT_PAGE,
 	};
 }
+
+export function storeSearchRequest(searchRequest) {
+	return {
+		type: Constants.SEARCH_REQUEST,
+		searchRequest,
+	};
+}
