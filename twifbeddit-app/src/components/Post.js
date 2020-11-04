@@ -42,7 +42,8 @@ const Post = (props) => {
 		dispatch = useDispatch(),
 		savedPostIds = useSelector((state) => state.account.savedPostIds);
 
-	const vote = async (command) => {
+	const vote = async (command, e) => {
+		e.stopPropagation();
 		const voteType = curVote === command ? "un" + command : command;
 		const oldCurVote = curVote;
 		setCurVote(voteType);
@@ -57,18 +58,24 @@ const Post = (props) => {
 			cookie,
 		});
 		if (resp.error) {
-			setCurVote(oldCurVote);
+			const error = resp.error + " ";
+			if (!error.includes("409")) {
+				setCurVote(oldCurVote);
+			}
 		}
 		setLoading(false);
 	};
 
 	const switchToAuthorAccount = (e) => {
 		e.stopPropagation();
-		dispatch(navigationActions.setUsernameForAccountPage(Username));
-		dispatch(navigationActions.changeCurrentPage("Account"));
+		if (Username) {
+			dispatch(navigationActions.setUsernameForAccountPage(Username));
+			dispatch(navigationActions.changeCurrentPage("Account"));
+		}
 	};
 
-	const savePost = async () => {
+	const savePost = async (e) => {
+		e.stopPropagation();
 		setLoading(true);
 		let params;
 		let saved = savedPostIds.includes(PostId);
@@ -107,7 +114,7 @@ const Post = (props) => {
 			<ContentCol col={12} onClick={() => viewPost()}>
 				<UserTopicRow>
 					<UserTopicText onClick={(e) => switchToAuthorAccount(e)}>
-						u/{Username}
+						u/{Username ? Username : "Anonymous"}
 					</UserTopicText>
 					<UserTopicText>r/{Topic}</UserTopicText>
 				</UserTopicRow>
@@ -121,13 +128,13 @@ const Post = (props) => {
 					<BodyText>{Body}</BodyText>
 				</BodyRow>
 				<VotesRow>
-					<UpvoteButton disabled={loading} onClick={() => vote("up")}>
+					<UpvoteButton disabled={loading} onClick={(e) => vote("up", e)}>
 						{curVote === "up" ? "undo UpVote" : "Upvote"}
 					</UpvoteButton>
-					<DownvoteButton disabled={loading} onClick={() => vote("down")}>
+					<DownvoteButton disabled={loading} onClick={(e) => vote("down", e)}>
 						{curVote === "down" ? "undo Downvote" : "Downvote"}
 					</DownvoteButton>
-					<SaveButton disabled={loading} onClick={() => savePost()}>
+					<SaveButton disabled={loading} onClick={(e) => savePost(e)}>
 						{savedPostIds.includes(PostId) ? "Unsave Post" : "Save Post"}
 					</SaveButton>
 				</VotesRow>

@@ -120,6 +120,7 @@ export default function SearchResults() {
 				{posts.map(function (post) {
 					return (
 						<Post
+							key={post._id}
 							Username={post.author}
 							Title={post.title}
 							Topic={post.topic}
