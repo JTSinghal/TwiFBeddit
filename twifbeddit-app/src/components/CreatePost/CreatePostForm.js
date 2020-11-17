@@ -29,7 +29,7 @@ export const Form = () => {
 			path: "topics",
 		});
 		if (resp.error) {
-			Alert.error("Something went wrong in loading posts", 4000);
+			Alert.error("Something went wrong in loading posts.", 4000);
 		} else {
 			//Convert list of JSON post objects into array
 			var topicsArray = [];

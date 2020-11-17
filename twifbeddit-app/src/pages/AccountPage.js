@@ -53,7 +53,7 @@ const AccountPage = () => {
 						dispatch(accountActions.setSavedPosts(resp.posts));
 						if (resp.error) {
 							Alert.error(
-								"Something went wrong getting your saved posts",
+								"Something went wrong getting your saved posts.",
 								4000
 							);
 						}
@@ -73,7 +73,7 @@ const AccountPage = () => {
 						);
 						if (resp.error) {
 							Alert.error(
-								"Something went wrong loading this users information",
+								"Something went wrong loading this users information.",
 								4000
 							);
 						}
@@ -88,7 +88,7 @@ const AccountPage = () => {
 				}).then((resp) => {
 					dispatch(globalActions.setPosts(resp.posts));
 					if (resp.error) {
-						Alert.error("Something went wrong loading this users posts", 4000);
+						Alert.error("Something went wrong loading this users posts.", 4000);
 					}
 				});
 			}

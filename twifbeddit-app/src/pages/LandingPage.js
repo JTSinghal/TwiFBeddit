@@ -18,7 +18,7 @@ export default function LandingPage() {
 			cookie: cookie,
 		});
 		if (resp.error) {
-			Alert.error("Something went wrong loading posts", 4000);
+			Alert.error("Something went wrong loading posts.", 4000);
 		} else {
 			//Convert list of JSON post objects into array
 			var postsArray = [];

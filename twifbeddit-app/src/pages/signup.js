@@ -151,12 +151,12 @@ export default function IndividualSignUp() {
 					},
 				});
 				if (resp.error) {
-					Alert.error("Erorr Signing Up", 4000);
+					Alert.error("Erorr Signing Up.", 4000);
 				} else {
 					dispatch(globalActions.setCookie(resp.cookie));
 					dispatch(accountActions.setUser(resp));
 					changeActiveScreen("LandingPage");
-					Alert.success("Successfully Signed Up", 4000);
+					Alert.success("Successfully Signed Up.", 4000);
 				}
 			} else {
 				Alert.error(

@@ -168,9 +168,9 @@ const EditAccountPage = () => {
 			cookie,
 		}).then((resp) => {
 			if (resp.error) {
-				Alert.error("Couldn't delete this user", 4000);
+				Alert.error("Something went wrong when deleting this user.", 4000);
 			} else {
-				Alert.success("Successfully deleted this user", 4000);
+				Alert.success("Successfully deleted this user.", 4000);
 			}
 		});
 		logout();

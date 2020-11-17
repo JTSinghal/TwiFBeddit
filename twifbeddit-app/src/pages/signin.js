@@ -140,7 +140,7 @@ export default function SignInSide() {
 			if (resp.error) {
 				Alert.error("Something went wrong signing in.");
 			} else {
-				Alert.success("Successfully signed in");
+				Alert.success("Successfully signed in.");
 				dispatch(globalActions.setCookie(resp.cookie));
 				dispatch(accountActions.setUser(resp));
 				changeActiveScreen("LandingPage");
