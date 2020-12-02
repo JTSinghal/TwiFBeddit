@@ -126,6 +126,7 @@ const AccountPage = ({ loading }) => {
 						username: usernameForAccountPage,
 					},
 				}).then((resp) => {
+					console.log(resp);
 					dispatch(navigationActions.setUserForAccountPage(resp));
 					dispatch(globalActions.changeLoading(false));
 					setIsCurUser(false);
@@ -268,7 +269,11 @@ const AccountPage = ({ loading }) => {
 						following={currentAccount.username === usernameForAccountPage}
 					>
 						<FollowText>Following</FollowText>
-						<FollowNum> {userForAccountPage.following.length} </FollowNum>
+						<FollowNum>
+							{" "}
+							{userForAccountPage.following.length +
+								userForAccountPage.followed_topics.length}{" "}
+						</FollowNum>
 					</FollowCol>
 				</UpperHeaderRow>
 				<UsernameRow>
