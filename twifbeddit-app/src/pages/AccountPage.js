@@ -131,7 +131,6 @@ const AccountPage = ({ loading }) => {
 						username: usernameForAccountPage,
 					},
 				}).then((resp) => {
-					console.log(resp);
 					dispatch(navigationActions.setUserForAccountPage(resp));
 					dispatch(globalActions.changeLoading(false));
 					setIsCurUser(false);
